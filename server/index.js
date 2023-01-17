@@ -8,10 +8,11 @@ const { parseString } = require('xml2js')
 app.use(express.json());
 app.use(cors());
 
-setInterval(function(){
+// Getting update only when restarting server
+setInterval(() => {
     axios('https://assignments.reaktor.com/birdnest/drones')
         .then(res =>  parseString(res.data, function (err, result) {renderThis(result)}))
-}, 3000)
+}, 1000);
 
 const renderThis = (result) => {
     app.use("/", async (req, res) => {

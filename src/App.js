@@ -10,9 +10,10 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       loadData();
-      }, 3000);
-      return () => clearInterval(interval);
-    }, []);
+      console.log('setAllDrones', allDrones)
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [allDrones]);
 
   function loadData() {
     axios.get('http://localhost:8080/')
@@ -42,8 +43,12 @@ function App() {
   const [violatingDrones, setViolatingDrones] = useState([])
   
   useEffect(() => {
-    setViolatingDrones(allDrones.filter(drone => inProhibitedArea(Number(drone.positionX), Number(drone.positionY))))
-  }, [allDrones])
+    const interval = setInterval(() => {
+      setViolatingDrones(allDrones.filter(drone => inProhibitedArea(Number(drone.positionX), Number(drone.positionY))))
+      console.log('setViolatingDrones', violatingDrones)
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [violatingDrones])
 
 
   return (
