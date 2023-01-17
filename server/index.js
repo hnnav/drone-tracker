@@ -9,11 +9,7 @@ const { parseString } = require('xml2js')
 app.use(express.json());
 app.use(cors());
 
-// const router = require('./router')
-// app.use("/", router);
-const url = 'https://assignments.reaktor.com/birdnest/drones'
-
-axios(url)
+axios('https://assignments.reaktor.com/birdnest/drones')
     .then(res => {
            parseString(res.data, function (err, result) {
                renderThis(result)
@@ -26,9 +22,6 @@ const renderThis = (result) => {
         res.json(result)
     });
 }
-
-  
-
 
 const PORT = 8080
 app.listen(PORT, () => {
