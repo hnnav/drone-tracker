@@ -4,19 +4,12 @@ import axios from 'axios'
 
 function App() {
 
-  const [user, setUser] = useState('')
-
   // Fetch all drones on 500m area
   useEffect(() => {
-    fetch('https://assignments.reaktor.com/birdnest/drones',{
-      method: "GET",
-      headers: {
-        "access-control-allow-origin" : "*",
-        "Content-type": "application/json; charset=UTF-8"
-      }})
-    .then(response => console.log(response))
-    // .catch((error) => console.log(error))
-
+    axios.get('http://localhost:8080/')
+    // .then(res => {setItems(res.data)})
+    .then(res => console.log(res.data))
+    .catch((error) => console.log(error))
   }, [])
 
   return (
