@@ -1,5 +1,4 @@
 const express = require('express')
-const router = express.Router()
 const app = express()
 const axios = require('axios')
 const cors = require('cors')
@@ -9,18 +8,16 @@ const { parseString } = require('xml2js')
 app.use(express.json());
 app.use(cors());
 
-axios('https://assignments.reaktor.com/birdnest/drones')
-    .then(res => {
-           parseString(res.data, function (err, result) {
-               renderThis(result)
-           })
-    })
+setInterval(function(){
+    axios('https://assignments.reaktor.com/birdnest/drones')
+        .then(res =>  parseString(res.data, function (err, result) {renderThis(result)}))
+}, 3000)
 
 const renderThis = (result) => {
-    console.log(result)
     app.use("/", async (req, res) => {
         res.json(result)
     });
+    console.log(result)
 }
 
 const PORT = 8080

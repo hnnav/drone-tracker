@@ -8,10 +8,17 @@ function App() {
   const [allDrones, setAllDrones] = useState([])
   
   useEffect(() => {
+    const interval = setInterval(() => {
+      loadData();
+      }, 3000);
+      return () => clearInterval(interval);
+    }, []);
+
+  function loadData() {
     axios.get('http://localhost:8080/')
     .then(res => setAllDrones(res.data.report.capture[0].drone))
     .catch((error) => console.log(error))
-  }, [allDrones])
+  }
   
   // Set time stamp
   const [timeStamp, setTimeStamp] = useState('')
@@ -31,19 +38,25 @@ function App() {
     }
   }
 
-  // Filter drones for violations
+  // Find drones closer than 100m to the nest
   const [violatingDrones, setViolatingDrones] = useState([])
+  
   useEffect(() => {
-    allDrones.map(drone => {
-      inProhibitedArea(Number(drone.positionX), Number(drone.positionY)) && setViolatingDrones(drone)
-    })
-  }, [violatingDrones])
+    setViolatingDrones(allDrones.filter(drone => inProhibitedArea(Number(drone.positionX), Number(drone.positionY))))
+  }, [allDrones])
+
 
   return (
     <div className="App">
       <h1>BIRDNEST - Drone Tracker</h1>
       <h2>Perimeter violations</h2>
-      {console.log(allDrones)}
+
+      {/* If drones in prohibited zone */}
+      {(violatingDrones.length > 0) && violatingDrones.map(drone => <p key={drone.serialNumber.toString()}>Serial Number: {drone.serialNumber.toString()}</p>
+      )}
+
+      {/* If no drones in prohibited zone */}
+      {(violatingDrones.length === 0) && <p>No area violations at the moment!</p>}
     </div>
   );
 }
