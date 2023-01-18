@@ -11,24 +11,24 @@ function App() {
     const interval = setInterval(() => {
       loadData();
       console.log('setAllDrones', allDrones)
-    }, 1000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [allDrones]);
 
   function loadData() {
     axios.get('http://localhost:8080/')
-    .then(res => setAllDrones(res.data.report.capture[0].drone))
+    .then(res => setAllDrones(res.data))
     .catch((error) => console.log(error))
   }
   
-  // Set time stamp
-  const [timeStamp, setTimeStamp] = useState('')
-
-  useEffect(() => {
-    axios.get('http://localhost:8080/')
-    .then(res => setTimeStamp(res.data.report.capture[0].$.snapshotTimestamp))
-    .catch((error) => console.log(error))
-  }, [timeStamp])
+  // // Set time stamp
+  // const [timeStamp, setTimeStamp] = useState('')
+// 
+  // useEffect(() => {
+  //   axios.get('http://localhost:8080/')
+  //   .then(res => setTimeStamp(res.data.report.capture[0].$.snapshotTimestamp))
+  //   .catch((error) => console.log(error))
+  // }, [timeStamp])
 
   // Equation to see if drone is in prohibited area
   const inProhibitedArea = (x, y) => {
@@ -39,16 +39,16 @@ function App() {
     }
   }
 
-  // Find drones closer than 100m to the nest
-  const [violatingDrones, setViolatingDrones] = useState([])
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setViolatingDrones(allDrones.filter(drone => inProhibitedArea(Number(drone.positionX), Number(drone.positionY))))
-      console.log('setViolatingDrones', violatingDrones)
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [violatingDrones])
+  // // Find drones closer than 100m to the nest
+  // const [violatingDrones, setViolatingDrones] = useState([])
+  // 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setViolatingDrones(allDrones.filter(drone => inProhibitedArea(Number(drone.positionX), Number(drone.positionY))))
+  //     console.log('setViolatingDrones', violatingDrones)
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, [violatingDrones])
 
 
   return (
@@ -57,11 +57,11 @@ function App() {
       <h2>Perimeter violations</h2>
 
       {/* If drones in prohibited zone */}
-      {(violatingDrones.length > 0) && violatingDrones.map(drone => <p key={drone.serialNumber.toString()}>Serial Number: {drone.serialNumber.toString()}</p>
-      )}
+      {/* {(violatingDrones.length > 0) && violatingDrones.map(drone => <p key={drone.serialNumber.toString()}>Serial Number: {drone.serialNumber.toString()}</p>
+      )} */}
 
       {/* If no drones in prohibited zone */}
-      {(violatingDrones.length === 0) && <p>No area violations at the moment!</p>}
+      {/* {(violatingDrones.length === 0) && <p>No area violations at the moment!</p>} */}
     </div>
   );
 }

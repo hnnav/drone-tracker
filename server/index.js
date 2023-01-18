@@ -2,17 +2,13 @@ const express = require('express')
 const app = express()
 const axios = require('axios')
 const cors = require('cors')
-const { parseString } = require('xml2js')
 const socket = require("socket.io");
 
 // middlewares
 app.use(express.json());
 app.use(cors());
 
-// axios('https://assignments.reaktor.com/birdnest/drones')
-//     .then(res =>  parseString(res.data, function (err, result) {renderThis(result)}))
-
-// Trying fetch with puppeteer
+// Fetch with puppeteer
 const puppeteer = require('puppeteer'); 
  
 (async () => { 
@@ -20,16 +16,22 @@ const puppeteer = require('puppeteer');
 	const page = await browser.newPage(); 
 	await page.goto('https://assignments.reaktor.com/birdnest/drones')
 
+    // Add mutation observer
+
     const data = await page.evaluate(() => {
-        all_elements = document.querySelectorAll('capture drone *');
+        all_elements = document.querySelectorAll('capture drone *')
         text_array = Array.from(all_elements);
-        return text_array.map(text => text.textContent);
+        content = text_array.map(text => text.textContent);
+
+        let arrays = []
+
+        while (content.length > 0)
+            arrays.push(content.splice(0, 10)); 
+        return arrays
     });
 
     console.log(data)
-
     renderThis(data)
-
 	await browser.close(); 
 })();
 
